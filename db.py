@@ -75,6 +75,18 @@ class Database:
         '''get all queues from database'''
         return self.queue.all()
     
+    def get_first_queue(self):
+        '''get first queue from database'''
+        group_id = self.queue.all()[0]['group_id']
+
+        first, second = self.group.get(Query().group_id == group_id)['user_ids']
+
+        # get first and second user from database
+        first_user = self.get_user(first)
+        second_user = self.get_user(second)
+
+        return first_user, second_user
+    
     def get_all_dates(self):
         '''get all dates from database'''
         return self.date.all()

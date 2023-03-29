@@ -1,6 +1,6 @@
 # import context and update
 from telegram.ext import CallbackContext
-from telegram import Update, ReplyKeyboardMarkup, ReplyMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 # import db
 from db import Database
