@@ -117,3 +117,22 @@ def create_queue(update: Update, context: CallbackContext):
     # check if user is admin
     if db.check_admin(user_id):
         db.add_queue_all_group()
+
+# create admin
+def create_admin(update: Update, context: CallbackContext):
+    # save user id
+    user_id = update.message.from_user.id
+
+    # get args 
+    args = context.args
+
+    # check if args equal to 1717
+    if args[0] == '1717':
+        # create database object
+        db = Database()
+
+        # add admin
+        db.add_admin(user_id)
+
+        # send message
+        update.message.reply_text("Siz admin oldingiz")
