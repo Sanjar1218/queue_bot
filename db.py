@@ -21,6 +21,8 @@ class Database:
 
         self.group.insert({'group_id': l, 'user_ids': [user_id]})
 
+        return l
+
     def add_user_to_group(self, user_id, group_id):
         '''add user to group'''
         self.group.update({'user_ids': Query().user_ids.append(user_id)}, Query().group_id == group_id)
@@ -84,7 +86,11 @@ class Database:
     
     def get_first_queue(self):
         '''get first queue from database'''
-        group_id = self.queue.all()[0]['group_id']
+        
+        al =  self.queue.all()
+        if len(al) == 0:
+            return None, None
+        group_id = al[0]['group_id']
 
         first, second = self.group.get(Query().group_id == group_id)['user_ids']
 

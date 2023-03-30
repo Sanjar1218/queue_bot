@@ -23,7 +23,8 @@ def start(update: Update, context: CallbackContext):
 
     # send button create group
     button = KeyboardButton('Create group')
-    markup = ReplyKeyboardMarkup([[button]], resize_keyboard=True)
+    button2 = KeyboardButton('Bugungi navbatchilar')
+    markup = ReplyKeyboardMarkup([[button, button2]], resize_keyboard=True)
 
     update.message.reply_text("Salom navbatchilik botiga xush kelibsiz\nGrouppa yaratish uchun pastki tugmani bosing", reply_markup=markup)
 
@@ -36,16 +37,15 @@ def create_group(update: Update, context: CallbackContext):
     db = Database()
 
     # add group to database
-    db.add_group(user_id)
+    group_id = db.add_group(user_id)
 
     # send inline buttons that shows users name in the callback user_id
     buttons = []
-    for i in db.group.all():
+    for i in db.user.all():
         # don't add user that is already in the group
-        if user_id not in i['user_ids']:
-            buttons.append(InlineKeyboardButton(i['first_name'], callback_data=i['user_id']))
+        buttons.append([InlineKeyboardButton(i['first_name'], callback_data=f"{i['user_id']}_{group_id}")])
 
-    markup = InlineKeyboardMarkup([buttons])
+    markup = InlineKeyboardMarkup(buttons)
 
     # send message
     if buttons:
@@ -68,6 +68,8 @@ def accept(update: Update, context: CallbackContext):
     buttons = [InlineKeyboardButton('Roziman✅', callback_data=f'accept_{user_id}'), InlineKeyboardButton('Noroziman❌', callback_data=f'notaccept_{user_id}')]
     markup = InlineKeyboardMarkup([buttons])
 
+    # asnwer callback
+    update.callback_query.answer('Xabaringiz jonatildi')
     # send message to chosen user
     context.bot.send_message(chosen_id, f"{db.get_user(user_id)['first_name']} sizni guruhga qo'shmoqchi\nQo'shishni roziman bo'lsangiz pastki tugmani bosing", reply_markup=markup)
 
@@ -78,7 +80,7 @@ def accept_callback(update: Update, context: CallbackContext):
 
     data = data[0]
 
-    sender_id = int(data[1])
+    sender_id = data[1]
 
     # user id
     user_id = update.callback_query.from_user.id
@@ -88,6 +90,9 @@ def accept_callback(update: Update, context: CallbackContext):
 
     # user name
     user_name = db.get_user(user_id)['first_name']
+
+    # asnwer callback
+    update.callback_query.answer('Xabaringiz jonatildi')
 
     # if user accept
     if data == 'accept':
@@ -161,3 +166,13 @@ def is_done(update: Update, context: CallbackContext):
 
         db.add_date(today, bool(args), group_id)
 
+def todays_queue(update: Update, context: CallbackContext):
+    # check if user is admin
+    db = Database()
+    
+    first, second = db.get_first_queue()
+
+    if first:
+        update.message.reply_text(f"Bugungi Navbatchilar\n{first['first_name']} {first['last_name']}\n{second['first_name']} {second['last_name']}")
+    else:
+        update.message.reply_text('Bugun hech kim navbatchi emas!')
