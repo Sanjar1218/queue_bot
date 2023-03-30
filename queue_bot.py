@@ -5,6 +5,8 @@ from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboard
 # import db
 from db import Database
 
+from datetime import date
+
 # start function
 def start(update: Update, context: CallbackContext):
     # save all user data
@@ -136,3 +138,23 @@ def create_admin(update: Update, context: CallbackContext):
 
         # send message
         update.message.reply_text("Siz admin oldingiz")
+
+# is_done function
+def is_done(update: Update, context: CallbackContext):
+    # check is group is done queue then add date to database
+
+    db = Database()
+    # check if user is admin
+    if db.check_admin(user_id):
+
+        # save user id
+        user_id = update.message.from_user.id
+
+        # get args
+        args = int(context.args[0])
+
+        today = date.today()
+        group_id = db.get_first_group_queue()['group_id']
+
+        db.add_date(today, bool(args), group_id)
+

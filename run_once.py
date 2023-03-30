@@ -19,3 +19,6 @@ first, second = db.get_first_queue()
 # send message to first user and second user
 send_message_to_user(first['user_id'], f"Bugun siz bilan {second['first_name']} navbatchilik kuningiz")
 send_message_to_user(second['user_id'], f"Bugun siz bilan {first['first_name']} navbatchilik kuningiz")
+
+# send message to admin that queue is done to group id
+send_message_to_user(db.get_admin()['user_id'], f"Guruh {first['group_id']} uchun navbatchilik qildimi?")

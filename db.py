@@ -1,4 +1,5 @@
 from tinydb import TinyDB, Query
+from datetime import date, timedelta
 
 db = TinyDB('db.json')
 # create class that will be used to store data
@@ -26,8 +27,14 @@ class Database:
 
     def add_queue_all_group(self):
         '''add queue to all groups'''
+        # get todays date
+        today = date.today()
         for i in self.group.all():
-            self.queue.insert({'group_id': i['group_id'], 'day_count': 0})
+            tomorrow = today + timedelta(days=1)
+
+            self.queue.insert({'group_id': i['group_id'], 'day_count': 1, 'day-1': today, 'day-2': tomorrow})
+
+            today = today + timedelta(days=1)
 
     def add_date(self, date, is_done, group_id):
         '''add date to corresponding group that is queue is done or not'''
@@ -86,6 +93,10 @@ class Database:
         second_user = self.get_user(second)
 
         return first_user, second_user
+    
+    def get_first_group_queue(self):
+        '''get first group queue from database'''
+        return self.queue.all()[0]
     
     def get_all_dates(self):
         '''get all dates from database'''
