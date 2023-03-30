@@ -1,7 +1,7 @@
 from tinydb import TinyDB, Query
 from datetime import date, timedelta
 
-db = TinyDB('db.json')
+db = TinyDB('db.json', indent=4, sort_keys=True, separators=(',', ': '))
 # create class that will be used to store data
 # this class has user, group, queue, date and admin database tables
 class Database:

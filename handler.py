@@ -1,5 +1,5 @@
 # import updater and dispatcher
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
 
 # import functions
 from queue_bot import (
@@ -23,7 +23,7 @@ dispatcher = updater.dispatcher
 
 # add handlers
 dispatcher.add_handler(CommandHandler("start", start))
-dispatcher.add_handler(CommandHandler("create_group", create_group))
+dispatcher.add_handler(MessageHandler(Filters.text("Create group"), create_group))
 dispatcher.add_handler(CallbackQueryHandler(accept, pattern='[0-9]+'))
 dispatcher.add_handler(CallbackQueryHandler(accept_callback, pattern='[a-z]+'))
 dispatcher.add_handler(CommandHandler("create_queue", create_queue))

@@ -195,7 +195,7 @@ pip-selfcheck.json
 
 # Local History for Visual Studio Code
 .history/
-
+token.sh
 # Built Visual Studio Code Extensions
 *.vsix
 

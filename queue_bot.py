@@ -48,7 +48,10 @@ def create_group(update: Update, context: CallbackContext):
     markup = InlineKeyboardMarkup([buttons])
 
     # send message
-    update.message.reply_text("Guruh yaratildi\nSherigingizni tanlang!", reply_markup=markup)
+    if buttons:
+        update.message.reply_text("Guruh yaratildi\nSherigingizni tanlang!", reply_markup=markup)
+    else:
+        update.message.reply_text('Hech qanday user yoq iltimos kuting yangi user qo\'shilgancha')
 
 # Accept callback function
 def accept(update: Update, context: CallbackContext):
